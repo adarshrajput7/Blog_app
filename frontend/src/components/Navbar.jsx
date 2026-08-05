@@ -9,20 +9,36 @@ import { toast } from "react-toastify"
 import { useDispatch, useSelector } from "react-redux"
 import { setUser } from "@/redux/authSlice"
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { ImExit } from "react-icons/im"
+import { CiUser } from "react-icons/ci"
+import { FaRegCommentAlt } from "react-icons/fa"
+import { LuNotebookPen } from "react-icons/lu"
+import { SlNotebook } from "react-icons/sl"
+
+
 
 const Navbar = () => {
 
     const { user } = useSelector(store => store.auth)
-    console.log('store dataaaaaaa',user)
+    // console.log('store dataaaaaaa', user)
     const dispatch = useDispatch()
     // const usershow = false
     const navigate = useNavigate()
     const logoutHndel = async (e) => {
-         e.preventDefault()
+        e.preventDefault()
         try {
             const res = await axios.get(`http://localhost:8000/api/v1/user/logout`, {
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json'
                 }, withCredentials: true
             })
             if (res.data.success) {
@@ -63,22 +79,47 @@ const Navbar = () => {
 
             {
                 user ? <div className="flex gap-2">
-                <Avatar>
-                    <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
-                        className="grayscale"
-                    />
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <Button onClick={logoutHndel} className='bg-red-600 hover:bg-red-700'>Logout</Button>
-            </div> :  <div className="flex gap-3 mr-10">
-                <Link to={'/login'}><button className="bg-gray-300 text-gray-900 px-3 py-1 hover:bg-gray-400  rounded-xl">Login</button></Link>
-                <Link to={'/signup'}><button className="bg-gray-300 text-gray-900 px-3 py-1 hover:bg-gray-400  rounded-xl">Signup</button></Link>
-            </div>
+
+                    {/* <Button onClick={logoutHndel} className='bg-red-600 hover:bg-red-700'>Logout</Button> */}
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger render={<Button variant="none"><Avatar>
+                            <AvatarImage
+                                src={user.photoUrl}
+                                alt="@shadcn"
+
+                            />
+                            {/* <AvatarFallback>CN</AvatarFallback> */}
+                            <AvatarFallback className="text-2xl font-bold flex items-center justify-center">
+                                {user?.fullName?.charAt(0) || 'U'}
+                            </AvatarFallback>
+                        </Avatar></Button>} />
+                        <DropdownMenuContent className="w-40" align="start">
+                            <DropdownMenuGroup>
+                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => navigate('/dashboard/profile')} ><CiUser /> Profile</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate('/dashboard/your-blog')}><SlNotebook />Your Blog</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate('/dashboard/comments')}><FaRegCommentAlt />Comments</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => navigate('/dashboard/write-blog')}><LuNotebookPen />Write Blogs</DropdownMenuItem>
+                            </DropdownMenuGroup>
+                            <DropdownMenuSeparator />
+
+                            <DropdownMenuGroup>
+                                <DropdownMenuItem onClick={logoutHndel} className='text-red-600'>
+                                    <ImExit /> Log out
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+
+                </div> : <div className="flex gap-3 mr-10">
+                    <Link to={'/login'}><button className="bg-gray-300 text-gray-900 px-3 py-1 hover:bg-gray-400  rounded-xl">Login</button></Link>
+                    <Link to={'/signup'}><button className="bg-gray-300 text-gray-900 px-3 py-1 hover:bg-gray-400  rounded-xl">Signup</button></Link>
+                </div>
             }
 
-            
+
 
         </div>
     )

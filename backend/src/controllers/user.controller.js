@@ -1,6 +1,8 @@
 import UserModel from "../models/user.model.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import cloudinary from "../service/cloudinary.js";
+import getDataUri from "../service/datauri.js";
 
 
 export const register = async (req, res) => {
@@ -48,7 +50,7 @@ export const register = async (req, res) => {
             password: hashPassword
         })
 
-        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, { expiresIn: '1d' })
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
 
         res.cookie('token', token, {
             httpOnly: true,
@@ -95,7 +97,7 @@ export const login = async (req, res) => {
         }
 
         const user = await UserModel.findOne({ email })
-        
+
         if (!user) {
             return res.status(409).json({
                 success: false,
@@ -112,7 +114,7 @@ export const login = async (req, res) => {
             })
         }
 
-        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET, { expiresIn: '1d' })
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
 
         res.cookie('token', token, {
             httpOnly: true,
@@ -123,12 +125,13 @@ export const login = async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            message: `Welcome Back ${user.fullName}`
+            message: `Welcome Back ${user.fullName}`,
+            user
         })
 
 
     } catch (error) {
-        console.log('login error ladle',error)
+        console.log('login error ladle', error)
         return res.status(500).json({
             success: false,
             message: "Internal server error"
@@ -140,7 +143,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
-        
+
         res.cookie('token', "", { maxAge: 0 })
         return res.status(200).json({
             success: true,
@@ -149,10 +152,72 @@ export const logout = async (req, res) => {
 
 
     } catch (error) {
-        console.log('logout error ladle',error)
+        console.log('logout error ladle', error)
         return res.status(500).json({
             success: false,
             message: "Internal server error"
         })
+    }
+}
+
+export const updateProfile = async (req, res) => {
+    try {
+        const userId = req.id
+        const { fullName, occupation, bio, instagram, facebook, github, linkedin } = req.body
+        const file = req.file
+        const user = await UserModel.findById(userId).select('-password')
+
+        if (!user) {
+            return res.status(401).json({
+                message: 'user not found',
+                success: false
+            })
+        }
+
+        if (file) {
+            //  old photo dlt code 
+            if (user.photoUrl) {
+                try {
+                    const publicId = user.photoUrl.split('/').pop().split('.')[0]
+                    await cloudinary.uploader.destroy(`profiles_photos/${publicId}`)
+                } catch (deleteError) {
+                    console.log('⚠️ Old photo not found')
+                }
+            }
+
+            // Upload new photo code +/*+/
+            const fileUri = getDataUri(file)
+            const cloudinaryResponse = await cloudinary.uploader.upload(fileUri, {
+                folder: 'profiles_photos',
+                width: 500,
+                height: 500,
+                crop: 'fill'
+            })
+            user.photoUrl = cloudinaryResponse.secure_url
+        }
+
+        if (fullName) user.fullName = fullName
+        if (occupation) user.occupation = occupation
+        if (instagram) user.instagram = instagram
+        if (facebook) user.facebook = facebook
+        if (github) user.github = github
+        if (linkedin) user.linkedin = linkedin
+        if (bio) user.bio = bio
+
+        await user.save()
+
+        return res.status(200).json({
+            message: 'Profile updated successfully',
+            success: true,
+            user
+        })
+
+    } catch (error) {
+        console.log('update profile error', error);
+        return res.status(500).json({
+            message: 'Authentication Error',
+            success: false
+        })
+
     }
 }
