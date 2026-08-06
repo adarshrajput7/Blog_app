@@ -30,6 +30,8 @@ import { Loader2 } from "lucide-react"
 const Profile = () => {
 
     const { user, loading } = useSelector(store => store.auth)
+    console.log(user);
+    
     const dispatch = useDispatch()
     const [input, setInput] = useState({
         fullName: user?.fullName,
@@ -77,6 +79,7 @@ const Profile = () => {
                     'Content-Type': "multipart/form-data"
                 }, withCredentials: true
             })
+            
             if (res.data.success) {
                 dispatch(setUser(res.data.user))
                 setOpen(false)
@@ -89,11 +92,11 @@ const Profile = () => {
 
 
     return (
-        <div className="m-10 flex items-center text-gray-900">
-            <Card className='' >
-                <div className='h-full w-220  flex gap-5 justify-around'>
+        <div className="m-10 flex items-center text-gray-900   w-[calc(80vw-72px)] h-fit justify-center">
+            <Card className='w-screen bg-gray-300 h-full' >
+                <div className='h-full w-220  flex gap-15 ml-15 flex-2'>
                     {/* image section  */}
-                    <div className="flex flex-col items-center gap-10 p-5">
+                    <div className="flex flex-col items-center gap-10 p-5 w-3/10">
                         <div>
                             <Avatar className='h-30 w-30 object-cover border-2 border-gray-900'>
                                 <AvatarImage src={user?.photoUrl} alt="Morty Avatar" />
@@ -111,12 +114,12 @@ const Profile = () => {
                         </div>
                     </div>
                     {/* details section  */}
-                    <div className="flex flex-col gap-5 justify-center p-5">
+                    <div className="flex flex-col gap-5 justify-center p-5 w-7/10">
                         <h1 className="text-2xl">Welcome {user.fullName}</h1>
                         <h1>Email: <span>{user.email}</span></h1>
                         <div>
                             <Label>About</Label>
-                            <p className="border-2  rounded-2xl p-3 mt-3 mb-5">{user.bio}</p>
+                            <p className="border-2 border-gray-500  rounded p-3 mt-3 mb-5">{user.bio}</p>
                             {/* <Button>Edit Profile</Button> */}
                             <Dialog open={open} onOpenChange={setOpen}>
 
@@ -138,7 +141,8 @@ const Profile = () => {
                                         </div>
                                         <div>
                                             <Label htmlFor="occupation" className="text-sm font-medium">Occupation</Label>
-                                            <Input id="occupation" name="occupation" defaultValue={user?.occupation || ''} />
+                                            <Input id="occupation" name="occupation"  value={input.occupation}
+                                                onChange={eventChangeHandler}/>
                                         </div>
                                     </div>
 

@@ -10,6 +10,7 @@ import YourBlog from './components/YourBlog'
 import CreateBlog from './components/CreateBlog'
 import Comments from './components/Comments'
 import Dashboard from './components/Dashboard'
+import UpdateBlog from './components/UpdateBlog'
 
 const App = () => {
 
@@ -26,7 +27,8 @@ const App = () => {
     { path: 'profile', element: <Profile/> },        
     { path: 'your-blog', element: <YourBlog/> },     
     { path: 'write-blog', element: <CreateBlog/> },  
-    { path: 'comments', element: <Comments/> }       
+    { path: 'comments', element: <Comments/> },       
+    { path: 'write-blog/:blogId', element: <UpdateBlog/> }       
   ]
 }
 

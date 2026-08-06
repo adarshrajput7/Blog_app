@@ -53,13 +53,13 @@ export const updateBlog = async (req, res) => {
         let thumbnail
         if (file) {
             const fileUri = getDataUri(file)
-             thumbnail = await cloudinary.uploader.upload(fileUri, {
-                folder:"Blog"
+            thumbnail = await cloudinary.uploader.upload(fileUri, {
+                folder: "Blog"
             })
         }
 
         const updateData = { title, subtitle, description, category, author: req.id, thumbnail: thumbnail?.secure_url }
-        blog = await BlogModel.findByIdAndUpdate(blogId, updateData, { returnDocument: 'after' } )
+        blog = await BlogModel.findByIdAndUpdate(blogId, updateData, { returnDocument: 'after' })
 
         return res.status(201).json({
             message: 'Blog updated successfully',

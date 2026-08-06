@@ -35,6 +35,6 @@ const blogSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-const BlogModel = mongoose.model("Blog",blogSchema)
+const BlogModel = mongoose.model("Blog", blogSchema)
 
 export default BlogModel

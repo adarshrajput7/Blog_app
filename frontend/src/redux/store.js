@@ -10,6 +10,7 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/es/storage'
 import authSlice from './authSlice'
+import blogSlice from './blogSlice'
 
 
 const persistConfig = {
@@ -19,7 +20,8 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-  auth:authSlice
+  auth: authSlice,
+  blog: blogSlice
 })
 
 

@@ -15,6 +15,7 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    occupation: { type: String, default: "" },
     photoUrl: { type: String, default: "" },
     instagram: { type: String, default: "" },
     facebook: { type: String, default: "" },
