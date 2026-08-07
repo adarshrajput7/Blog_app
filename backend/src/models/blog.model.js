@@ -16,14 +16,14 @@ const blogSchema = new mongoose.Schema({
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'user'
     },
     category: {
         type: String
     },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'user'
     }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
