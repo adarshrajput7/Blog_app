@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { setBlog, setLoading } from '@/redux/blogSlice';
 import { Loader2 } from 'lucide-react';
 
@@ -30,6 +30,7 @@ const UpdateBlog = () => {
         description: content,
         category: selectBlog?.category
     })
+    const navigate = useNavigate()
 
     const eventChangeHandle = (e) => {
         const { name, value } = e.target
@@ -75,6 +76,7 @@ const UpdateBlog = () => {
                 dispatch(
                     setBlog(blog.map((item) => item._id === id ? res.data.blog : item))
                 );
+                navigate('/dashboard/your-blog')
                 toast.success(res.data.message)
             }
         } catch (error) {
