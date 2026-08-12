@@ -11,6 +11,7 @@ import CreateBlog from './components/CreateBlog'
 import Comments from './components/Comments'
 import Dashboard from './components/Dashboard'
 import UpdateBlog from './components/UpdateBlog'
+import BlogView from './components/BlogView'
 
 const App = () => {
 
@@ -19,6 +20,7 @@ const App = () => {
     { path: '/about', element: <><Navbar /><About /></> },
     { path: '/blogs', element: <><Navbar /><Blogs /></> },
     { path: '/login', element: <><Navbar /><Login /></> },
+    { path: '/blog/:blogId', element: <><Navbar /><BlogView /></> },
     { path: '/signup', element: <><Navbar /><Signup /></> },
     {
   path: '/dashboard',
@@ -35,7 +37,8 @@ const App = () => {
   ])
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    // <div className="flex flex-col h-full overflow-y-auto">
+    <div className="flex flex-col h-full overflow-y-auto custom-scrollbar scroll-smooth">
       <RouterProvider router={router} />
     </div>
   )

@@ -17,7 +17,7 @@ app.use(cors({
 
 
 app.use('/api/v1/user',userRoutes)
-app.use('/api/v1/blog',blogRoutes)
+app.use('/api/v1/blog', blogRoutes)
 
 
 

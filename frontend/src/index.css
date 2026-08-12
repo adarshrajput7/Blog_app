@@ -132,3 +132,50 @@
 
 
 
+/* ✅ Animated Glowing Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #8b5cf6, #6366f1);
+  background-size: 200% 200%;
+  border-radius: 10px;
+  animation: scrollbarGlow 2s ease infinite;
+}
+
+@keyframes scrollbarGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ✅ Pulse Effect */
+::-webkit-scrollbar-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 20px #6366f1, 0 0 40px #8b5cf6;
+}
+
+/* ✅ Dark Mode */
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4f46e5, #7c3aed, #4f46e5);
+  background-size: 200% 200%;
+  animation: scrollbarGlow 2s ease infinite;
+}
+
+
+
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

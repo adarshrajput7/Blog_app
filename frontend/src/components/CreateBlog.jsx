@@ -49,7 +49,9 @@ console.log(Array.isArray(blog));
       }
     } catch (error) {
       console.log('create blog frontend', error)
+      toast.error(error.response?.data?.message || 'Something went wrong')
     } finally { dispatch(setLoading(false)) }
+
 
   }
 

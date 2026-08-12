@@ -83,10 +83,10 @@ const YourBlog = () => {
             <TableCaption>A list of your recent Blogs.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className='text-center'>Title</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-center">Amount</TableHead>
+                <TableHead className='text-center w-2.1/4'>Title</TableHead>
+                <TableHead className=' w-0.8/4'>Category</TableHead>
+                <TableHead className=' w-0.8/4'>Date</TableHead>
+                <TableHead className='text-center w-0.8/4'>Amount</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -102,7 +102,7 @@ const YourBlog = () => {
                         e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f3f4f6'/%3E%3Crect x='32' y='30' width='36' height='24' rx='2' fill='%23d1d5db' stroke='%239ca3af' stroke-width='1.5'/%3E%3Cpolygon points='45,38 55,38 50,46' fill='%236b7280'/%3E%3Ccircle cx='50' cy='42' r='5' fill='%239ca3af'/%3E%3Ctext x='50' y='72' font-family='Arial' font-size='8' fill='%236b7280' text-anchor='middle' font-weight='bold'%3ENO THUMBNAIL%3C/text%3E%3C/svg%3E";
                       }}
                     />
-                    <h1 className="font-bold hover:underline cursor-pointer">{item.title}</h1>
+                    <h1 onClick={()=>navigate(`/blog/${item._id}`)} className="w-150 overflow-hidden font-bold hover:underline hover:text-blue-600  cursor-pointer">{item.title}</h1>
                   </TableCell>
                   <TableCell>{item.category}</TableCell>
                   <TableCell>

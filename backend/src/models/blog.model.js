@@ -29,7 +29,7 @@ const blogSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Comment'
     }],
-    isPublisihed: {
+    isPublished: {
         type: Boolean,
         default: false
     }

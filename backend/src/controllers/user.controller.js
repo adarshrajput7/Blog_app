@@ -221,3 +221,25 @@ export const updateProfile = async (req, res) => {
 
     }
 }
+
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await UserModel.find().select('-password')
+
+        
+        return res.status(200).json({
+            success: true,
+            total:users.length,
+            message: 'user list getched successfully',
+            users
+        })
+    } catch (error) {
+        console.log("error fething eror", error);
+        return res.status(500).json({
+            success: true,
+            message:'Failed to fetch users'
+        })
+        
+    }
+}
