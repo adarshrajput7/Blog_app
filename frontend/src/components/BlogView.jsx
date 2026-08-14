@@ -18,6 +18,7 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { updateSingleBlog } from "@/redux/blogSlice"
 import { FcLike } from "react-icons/fc";
+import CommentBox from "./CommentBox"
 
 const BlogView = () => {
 
@@ -82,7 +83,7 @@ const BlogView = () => {
     }
 
     return (
-        <div className="h-screen overflow-y-auto">
+        <div className="">
             <div className="max-w-6xl mx-auto p-10">
                 <Breadcrumb>
                     <BreadcrumbList>
@@ -169,6 +170,7 @@ const BlogView = () => {
                             </Button>
                         </div>
                     </div>
+                    <CommentBox selectedBlog={ selectedBlog} />
                 </div>
             </div>
         </div>

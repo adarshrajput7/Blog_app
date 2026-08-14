@@ -3,6 +3,7 @@ import userRoutes from './routes/user.route.js'
 import cookieparser from 'cookie-parser'
 import cors from 'cors'
 import blogRoutes from './routes/blog.routes.js'
+import commentRouter from './routes/comment.route.js'
 
 
 const app = express()
@@ -18,6 +19,7 @@ app.use(cors({
 
 app.use('/api/v1/user',userRoutes)
 app.use('/api/v1/blog', blogRoutes)
+app.use('/api/v1/comment', commentRouter)
 
 
 
