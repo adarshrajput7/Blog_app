@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import BlogModel from "../models/blog.model.js"
 import cloudinary from "../service/cloudinary.js"
 import getDataUri from "../service/datauri.js"
+import { CommentModel } from "../models/comment.model.js"
 
 
 export const createBlog = async (req, res) => {
@@ -135,7 +136,9 @@ export const deleteBlog = async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized to delete thi blog', success: false })
         }
 
-        // ✅ Delete thumbnail from Cloudinary (same logic like update)
+
+
+        // Delete thumbnail from Cloudinary (same logic like update)
         if (blog.thumbnail) {
             try {
                 const publicId = blog.thumbnail.split('/').pop().split('.')[0]
@@ -146,6 +149,11 @@ export const deleteBlog = async (req, res) => {
             }
         }
 
+        //Delete all commets, jis post ko delete kar rahe hai uske comments bhi delete  ho jane chahiye jo commets me me mongoDB me
+         if (blog.comments && blog.comments.length > 0) {
+            await CommentModel.deleteMany({ _id: { $in: blog.comments } })
+        }
+
         await BlogModel.findByIdAndDelete(blogId)
         return res.status(201).json({ message: 'Blog Deleted Successfully', success: true })
 
@@ -154,7 +162,6 @@ export const deleteBlog = async (req, res) => {
 
     }
 }
-
 
 export const likeUnlike = async (req, res) => {
     try {

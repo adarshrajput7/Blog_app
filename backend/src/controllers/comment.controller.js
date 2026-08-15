@@ -179,7 +179,7 @@ export const likeComment = async (req, res) => {
             comment.numberOfLikes += 1
         }
 
-        await comment.save()
+        await comment.save({ timestamps: false })
         return res.status(200).json({
             success: true,
             message: alreadyLiked ? "Comment unliked" : "Comment Liked",
@@ -187,5 +187,40 @@ export const likeComment = async (req, res) => {
         })
     } catch (error) {
         console.error("🚀 ~ likeComment ~ error:", error)
+    }
+}
+
+export const gatMyOwnAllComments = async (req, res) => {
+    try {
+        const userId = req.id
+        const myBlogs = await BlogModel.find({ author: userId }).select('_id')
+        const blogIds = myBlogs.map(blog => blog._id)
+
+        if (!myBlogs || blogIds.length === 0) {
+            return res.status(200).json({
+                success: true,
+                totalComments: 0,
+                comments: [],
+                message: 'No blogs found for this user'
+            })
+        }
+
+        const comments = await CommentModel.find({ postId: { $in: blogIds } })
+            .populate("userId", "fullName")
+            .populate("postId", "title")
+
+        return res.status(200).json({
+            success: true,
+            comments,
+            totalComments: comments.length
+        })
+
+    } catch (error) {
+        console.error("🚀 ~ getAllCommentsOnMyBlogs ~ error:", error)
+        return res.status(500).json({
+            message: 'failed to get comments',
+            success: false,
+            error:error.message
+        })
     }
 }

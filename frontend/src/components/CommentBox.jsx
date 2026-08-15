@@ -9,9 +9,9 @@ import { setComment } from "@/redux/commentSlice"
 import { setBlog } from "@/redux/blogSlice"
 import { toast } from "react-toastify"
 import { EllipsisVertical, Trash2 } from "lucide-react"
-import { CiHeart } from "react-icons/ci"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { FaEdit } from "react-icons/fa"
+import { FaEdit, FaRegHeart } from "react-icons/fa"
+import { FcLike } from "react-icons/fc"
 
 
 
@@ -102,6 +102,20 @@ const CommentBox = ({ selectedBlog }) => {
         } catch (error) {
             console.error("🚀 ~ editCommentHandler ~ error:", error)
 
+        }
+    }
+
+    const likeCommentHandler = async (id) => {
+        try {
+            const res = await axios.get(`http://localhost:8000/api/v1/comment/${id}/like`, { withCredentials: true })
+            if (res.data.success) {
+                const updatedComentData = res.data.updatedComment
+                const updatedComentList = comment.map(item => item._id === id ? updatedComentData : item)
+                dispatch(setComment(updatedComentList))
+                toast.success(res.data.message)
+            }
+        } catch (error) {
+            console.error("🚀 ~ likeCommentHndler ~ error:", error)
         }
     }
 
@@ -201,7 +215,12 @@ const CommentBox = ({ selectedBlog }) => {
                                 }
                             </div>
                             <div className="flex gap-2 items-center px-12 mt-1 cursor-pointer">
-                                <CiHeart className="text-red-500" /><span className="text-red-500">0</span>
+
+                                <Button onClick={() => likeCommentHandler(item._id)} variant="none">
+                                    {
+                                        item.likes.includes(user._id) ? <FcLike /> : <FaRegHeart />
+                                    }
+                                    <span className="text-gray-900">{item.numberOfLikes}</span></Button>
                                 <p>Reply</p>
                             </div>
                         </div>

@@ -37,7 +37,7 @@ const Blogs = () => {
                 <h1 className="text-4xl font-bold text-gray-800 dark:text-white">Blogs</h1>
                 <hr className="w-20 h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" />
             </div>
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 px-10 overflow-y-auto items-center h-full justify-center ">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 px-10 overflow-y-auto items-center h-full justify-center mb-2">
       
       {
         blog?.map((blog, index) => {
