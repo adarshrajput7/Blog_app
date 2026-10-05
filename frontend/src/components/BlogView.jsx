@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -11,7 +11,7 @@ import {
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Heart } from "lucide-react";
 import { Button } from "./ui/button";
-import { FaRegBookmark, FaRegCommentAlt } from "react-icons/fa";
+import { FaRegCommentAlt } from "react-icons/fa";
 import { MdOutlineShare } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -20,12 +20,15 @@ import { updateSingleBlog } from "@/redux/blogSlice";
 import { FcLike } from "react-icons/fc";
 import CommentBox from "./CommentBox";
 import { AnimatePresence, motion } from "framer-motion"
+import BookmarkButton from "./BookmarkButton";
 
 const BlogView = () => {
     const params = useParams();
     const blogId = params.blogId;
     const { blog } = useSelector((store) => store.blog);
     const { user } = useSelector((store) => store.auth);
+
+    const navigate = useNavigate()
 
     const selectedBlog = blog.find((b) => b._id === blogId); // ✅ .find use kar
     console.log("jis blog ko view kiya", selectedBlog);
@@ -62,6 +65,14 @@ const BlogView = () => {
     };
 
     const likeHandle = async () => {
+        if (!user) {
+                toast.error("Please login to like blogs");
+                navigate("/login");
+                return;
+        }
+        
+
+        
         try {
             const res = await axios.post(
                 `http://localhost:8000/api/v1/blog/${selectedBlog._id}`,
@@ -99,33 +110,33 @@ const BlogView = () => {
 
     return (
         <div className="">
-            <div className="max-w-6xl mx-auto p-10">
+            <div className="max-w-6xl mx-auto p-2 md:p-10">
                 <Breadcrumb>
                     <BreadcrumbList>
                         <BreadcrumbItem>
-                            <BreadcrumbLink render={<a href="#">Home</a>} />
+                            <BreadcrumbLink render={<span onClick={()=>navigate('/') } className='cursor-pointer md:text-sm text-xs'>Home</span>} />
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbLink render={<a href="#">Components</a>} />
+                            <BreadcrumbLink render={<span onClick={()=>navigate('/blogs') } className='cursor-pointer md:text-sm text-xs'>All Blogs</span>} />
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbPage>{selectedBlog.title}</BreadcrumbPage>
+                            <BreadcrumbPage className='line-clamp-1 md:max-w-full max-w-60 overflow-hidden text-blue-500 md:text-sm text-xs'>{selectedBlog.title}</BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
-                <div className="pt-7">
-                    <h1 className="text-3xl">{selectedBlog.title}</h1>
+                <div className="md:pt-7 pt-4">
+                    <h1 className="text-xl md:text-3xl font-serif">{selectedBlog.title}</h1>
                     <div className="flex items-center justify-between">
                         <div className="mt-2 flex gap-2 items-center ">
                             <Avatar>
                                 <AvatarImage src={selectedBlog.author.photoUrl} />
                             </Avatar>
-                            <p>{selectedBlog.author.fullName}</p>
+                            <p className="md:text-sm text-xs">{selectedBlog.author.fullName}</p>
                         </div>
-                        <h1 className="text-sm text-gray-500">
-                            Publised on:
+                        <h1 className="text-xs md:text-sm text-gray-500">
+                            Published on: 
                             {new Date(selectedBlog.createdAt).toLocaleString("en-US", {
                                 year: "numeric",
                                 month: "long",
@@ -142,9 +153,9 @@ const BlogView = () => {
                             alt=""
                         />
                     </div>
-                    <h1>{selectedBlog.subtitle}</h1>
+                    <h1 className="text-gray-700 me:text-sm text-xs font-serif">{selectedBlog.subtitle}</h1>
                     <div
-                        className="prose prose-lg max-w-none text-gray-900 py-3 leading-relaxed"
+                        className="prose prose-lg max-w-none text-gray-900 py-3 text-sm md:text-xl leading-relaxed text-justify"
                         dangerouslySetInnerHTML={{
                             __html: selectedBlog.description || "No content available",
                         }}
@@ -152,34 +163,10 @@ const BlogView = () => {
                     <div className="border-t-2 border-b-2 border-gray-400 py-2 flex justify-between">
                         <div>
                             {/* ✅ Heart button with conditional styling */}
-                            {/* <Button 
-                                variant="none" 
-                                onClick={likeHandle}
-                                className={`flex items-center gap-1 transition-all ${
-                                    isLikedByUser 
-                                        ? 'text-red-500' 
-                                        : 'text-gray-600 hover:text-red-400'
-                                }`}
-                            >
-                                <Heart 
-                                    size={20}
-                                    // fill={isLikedByUser ? 'currentColor' : 'none'}
-                                    // strokeWidth={isLikedByUser ? 0 : 2}
-                                />
-                                <span>{selectedBlog?.likes?.length || 0}</span>
-                            </Button> */}
                             <Button variant="none" onClick={likeHandle}>
                                 {isLikedByUser ? <FcLike size={20} /> : <Heart size={20} />}
                                 <span>{selectedBlog?.likes?.length || 0}</span>
                             </Button>
-
-                            {/* <Button
-                variant="none"
-                onClick={() => setCommentShow((prev) => !prev)}
-              >
-                <FaRegCommentAlt />
-                <span>{selectedBlog?.comments?.length || 0} Comments</span>
-              </Button> */}
 
                             <Button
                                 variant="none"
@@ -207,9 +194,10 @@ const BlogView = () => {
                             </Button>
                         </div>
                         <div>
-                            <Button variant="none">
+                            {/* <Button variant="none">
                                 <FaRegBookmark />
-                            </Button>
+                            </Button> */}
+                            <BookmarkButton selectedBlog={ selectedBlog} />
                             <Button
                                 variant="none"
                                 onClick={handleShare}

@@ -92,7 +92,7 @@ export const deleteComment = async (req, res) => {
             })
         }
 
-        const blogId = comment.userId
+        const blogId = comment.postId
 
         await CommentModel.findByIdAndDelete(commentId) //comment delete 
 
@@ -206,8 +206,8 @@ export const gatMyOwnAllComments = async (req, res) => {
         }
 
         const comments = await CommentModel.find({ postId: { $in: blogIds } })
-            .populate("userId", "fullName")
-            .populate("postId", "title")
+            .populate("userId", "fullName photoUrl")
+            .populate("postId", "title thumbnail")
 
         return res.status(200).json({
             success: true,

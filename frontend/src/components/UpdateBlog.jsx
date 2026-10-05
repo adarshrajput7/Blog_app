@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { setBlog, setLoading } from '@/redux/blogSlice';
-import { Loader2 } from 'lucide-react';
+import { ChevronLeft, Loader2, Save, Trash2 } from 'lucide-react';
 
 
 
@@ -87,14 +87,14 @@ const UpdateBlog = () => {
 
 
     return (
-        <div className=" px-3 h-screen w-[calc(85vw-72px)] overflow-y-auto pb-50">
-            <div className="w- mx-auto m-2">
+        <div className="md:px-3 h-screen lg:w-[calc(85vw-72px)] overflow-y-auto pb-10 w-screen md:pt-10 md:mt-0 mt-13">
+            <div className="w-mx-auto pb-5">
                 <Card className='w-full dark:bg-gray-900 p-5 space-y-1'>
-                    <h1>Basic Blog Information</h1>
-                    <p>Makes changes to your blog here. Click publish when you are done</p>
+                    <h1 className='md:text-3xl text-xl'>Basic Blog Information</h1>
+                    <p className='md:text-xl text-sm '>Makes changes to your blog here. Click publish when you are done</p>
                     <div className="space-x-2">
                         <Button>Publish</Button>
-                        <Button variant="destructive">Remove blog</Button>
+                        <Button variant="destructive"><Trash2 />Remove blog</Button>
                     </div>
                     <div>
                         <Label>Title</Label>
@@ -157,9 +157,9 @@ const UpdateBlog = () => {
                         )}
                     </div>
                     <div>
-                        <Button variant='outline'>Back</Button>
+                        <Button variant='outline' onClick={() => navigate(-1)}><ChevronLeft />Back</Button>
                         <Button onClick={submitHandler}>{
-                            loading ? <><Loader2 className='w-4 h-4 animate-spin' /></> : "Save"
+                            loading ? <><Loader2 className='w-4 h-4 animate-spin' /></> : <> <Save /> Save </>
                         }</Button>
                     </div>
                 </Card>

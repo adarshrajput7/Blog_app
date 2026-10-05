@@ -4,6 +4,7 @@ import cookieparser from 'cookie-parser'
 import cors from 'cors'
 import blogRoutes from './routes/blog.routes.js'
 import commentRouter from './routes/comment.route.js'
+import path from 'path'
 
 
 const app = express()
@@ -16,10 +17,19 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+const _dirname = path.resolve()
+
 
 app.use('/api/v1/user',userRoutes)
 app.use('/api/v1/blog', blogRoutes)
 app.use('/api/v1/comment', commentRouter)
+
+
+app.use(express.static(path.join(_dirname,"/frontend/dist")))
+
+// app.get('*', (_, res) => {
+//     res.sendFile(path.resolve,"frontend", "dist", "index.html")
+// })
 
 
 

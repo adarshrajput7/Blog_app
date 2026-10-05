@@ -19,7 +19,7 @@ blogRoutes.post('/:blogId', isAuthenticated, likeUnlike);
 // Get blog with like status (protected route)
 blogRoutes.get('/:blogId/status', isAuthenticated, getBlogWithLikeStatus);
 
-blogRoutes.get('/get-publishhed-blogs', isAuthenticated, getPublishedBlog)
+blogRoutes.get('/get-publishhed-blogs', getPublishedBlog)
 
 
 

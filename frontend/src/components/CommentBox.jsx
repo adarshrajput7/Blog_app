@@ -12,6 +12,7 @@ import { EllipsisVertical, Trash2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { FaEdit, FaRegHeart } from "react-icons/fa"
 import { FcLike } from "react-icons/fc"
+import { useNavigate } from "react-router-dom"
 
 
 
@@ -21,6 +22,8 @@ const CommentBox = ({ selectedBlog }) => {
     console.log("🚀 ~ CommentBox ~ user:", user)
     const { blog } = useSelector(store => store.blog)
     const { comment } = useSelector(store => store.comment)
+    const comments = Array.isArray(comment) ? comment : []
+    const navigate = useNavigate()
     console.log("🚀 ~ CommentBox ~ comments:", comment)
     const [content, setContent] = useState('')
     const dispatch = useDispatch()
@@ -29,28 +32,77 @@ const CommentBox = ({ selectedBlog }) => {
     const [editingContent, setEditingContent] = useState("")
 
 
+    // const createCommentHandler = async () => {
+    //     try {
+    //         const res = await axios.post(`http://localhost:8000/api/v1/comment/${selectedBlog._id}/create`, { content }, {
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             }, withCredentials: true
+    //         })
+
+    //         if (res.data.success) {
+    //             let updatedComment;
+    //             if (comment.length >= 1) {
+    //                 updatedComment = [...comment, res.data.comment]
+    //             } else { updatedComment = [res.data.comment] }
+    //             dispatch(setComment(updatedComment))
+    //             const updateBlogData = blog.map(blog => blog._id === selectedBlog._id ? { ...blog, comments: updatedComment } : blog)
+    //             dispatch(setBlog(updateBlogData))
+    //             toast.success(res.data.message)
+    //             setContent("")
+    //         }
+
+    //     } catch (error) {
+    //         console.error("🚀 ~ createCommentHandler ~ error:", error)
+    //     }
+    // }
+
     const createCommentHandler = async () => {
         try {
-            const res = await axios.post(`http://localhost:8000/api/v1/comment/${selectedBlog._id}/create`, { content }, {
-                headers: {
-                    "Content-Type": "application/json"
-                }, withCredentials: true
-            })
+            const res = await axios.post(
+                `http://localhost:8000/api/v1/comment/${selectedBlog._id}/create`,
+                { content },
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    withCredentials: true
+                }
+            )
 
             if (res.data.success) {
-                let updatedComment;
-                if (comment.length >= 1) {
-                    updatedComment = [...comment, res.data.comment]
-                } else { updatedComment = [res.data.comment] }
-                dispatch(setComment(updatedComment))
-                const updateBlogData = blog.map(blog => blog._id === selectedBlog._id ? { ...blog, comments: updatedComment } : blog)
-                dispatch(setBlog(updateBlogData))
+                // Add new comment to comments state
+                const updatedComments = [
+                    ...comment,
+                    res.data.comment
+                ]
+
+                dispatch(setComment(updatedComments))
+
+                // Update blog's comment IDs
+                const updatedBlogs = blog.map((item) =>
+                    item._id === selectedBlog._id
+                        ? {
+                            ...item,
+                            comments: [
+                                ...item.comments,
+                                res.data.comment._id
+                            ]
+                        }
+                        : item
+                )
+
+                dispatch(setBlog(updatedBlogs))
+
                 toast.success(res.data.message)
                 setContent("")
             }
 
         } catch (error) {
             console.error("🚀 ~ createCommentHandler ~ error:", error)
+            toast.error(
+                error?.response?.data?.message || "Error creating comment"
+            )
         }
     }
 
@@ -71,15 +123,40 @@ const CommentBox = ({ selectedBlog }) => {
                 withCredentials: true
             })
 
+            // if (res.data.success) {
+            //     const updatedComment = comment.filter((item) => item._id !== commentId)
+            //     dispatch(setComment(updatedComment))
+            //     toast.success(res.data.message)
+            // }
+
             if (res.data.success) {
-                const updatedComment = comment.filter((item) => item._id !== commentId)
+
+                const updatedComment = comment.filter(
+                    (item) => item._id !== commentId
+                )
+
                 dispatch(setComment(updatedComment))
+
+                const updateBlogData = blog.map(blog =>
+                    blog._id === selectedBlog._id
+                        ? {
+                            ...blog,
+                            comments: blog.comments.filter(
+                                item => item.toString() !== commentId
+                            )
+                        }
+                        : blog
+                )
+
+                dispatch(setBlog(updateBlogData))
+
                 toast.success(res.data.message)
             }
         } catch (error) {
             console.error("🚀 ~ deleteComment ~ error:", error)
         }
     }
+
 
     const editCommentHandler = async (id) => {
         try {
@@ -92,7 +169,7 @@ const CommentBox = ({ selectedBlog }) => {
             if (res.data.success) {
                 //update  varible comment me new comment bhi aad kar do
                 const updatedCommentData = comment.map(item =>
-                    item._id === id ? { ...item, content: editingContent } : item
+                    item._id === id ? { ...item, content: editingContent,updatedAt: new Date().toISOString() } : item
                 );
                 dispatch(setComment(updatedCommentData))
                 toast.success(res.data.message)
@@ -106,6 +183,12 @@ const CommentBox = ({ selectedBlog }) => {
     }
 
     const likeCommentHandler = async (id) => {
+        if (!user) {
+            toast.error("Please login first");
+            navigate("/login");
+            return;
+        }
+
         try {
             const res = await axios.get(`http://localhost:8000/api/v1/comment/${id}/like`, { withCredentials: true })
             if (res.data.success) {
@@ -121,28 +204,35 @@ const CommentBox = ({ selectedBlog }) => {
 
     useEffect(() => {
         getCommentsAllPost()
-    }, [1])
+    }, [])
 
     return (
         <div className="py-2 flex justify-between mt-5 flex-col">
-            <div className="flex items-center gap-2">
-                <Avatar>
-                    <AvatarImage src={user.photoUrl} />
-                </Avatar>
-                <h1>{user.fullName}</h1>
-            </div>
-            <div >
-                <Textarea
-                    placeholder="Leave a comment"
-                    className='my-2 border-2 border-gray-400 max-h-20 overflow-auto'
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
-                <Button onClick={createCommentHandler}>Comment</Button>
-            </div>
+            {user ? (
+
+                <div>
+                    <div className="flex items-center gap-2">
+                        <Avatar>
+                            <AvatarImage src={user.photoUrl} />
+                        </Avatar>
+                        <h1>{user.fullName}</h1>
+                    </div>
+                    <Textarea
+                        placeholder="Leave a comment"
+                        className="my-2 border-2 border-gray-400 max-h-20 overflow-auto"
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                    />
+                    <Button onClick={createCommentHandler}>Comment</Button>
+                </div>
+            ) : (
+                <p className="text-gray-600">
+                    Please login to comment. <span className="text-blue-600 cursor-pointer" onClick={() => navigate('/login')}>Login</span>
+                </p>
+            )}
             <Card className="mt-2">
                 {
-                    comment.map((item, index) => {
+                    comments.map((item, index) => {
                         return <div className="p-2">
                             <div key={index} className="flex items-center gap-2">
                                 <Avatar>
@@ -187,7 +277,7 @@ const CommentBox = ({ selectedBlog }) => {
                                             <Textarea
                                                 value={editingContent}
                                                 onChange={(e) => setEditingContent(e.target.value)}
-                                                className='w-200 border-2 border-gray-400 max-h-20 overflow-auto'
+                                                className='lg:w-200 w-[80vw] border-2 border-gray-400 max-h-20 overflow-auto'
                                             />
                                             <div className="flex gap-2">
                                                 <Button onClick={() => editCommentHandler(item._id)}>Save</Button>

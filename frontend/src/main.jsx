@@ -8,15 +8,17 @@ import { Provider } from 'react-redux'
 import { store } from './redux/store'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
+import LenisProvider from './components/LenisProvider'
 
 const persistor = persistStore(store)
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
+      <LenisProvider>
       <App />
       <ToastContainer
-        position="bottom-right"
+        position="top-center"
         autoClose={2000}
         hideProgressBar={true}
         newestOnTop={true}
@@ -25,8 +27,11 @@ createRoot(document.getElementById('root')).render(
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark"
-      />
+        theme="light"
+        toastClassName="liquid-toast"
+        bodyClassName="liquid-toast-body"
+        />
+        </LenisProvider>
     </PersistGate>
   </Provider>
 )

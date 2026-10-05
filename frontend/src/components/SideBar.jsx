@@ -1,17 +1,59 @@
-import { NavLink } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { Navigate, NavLink } from "react-router-dom"
 
 
 const SideBar = () => {
+
+    const { user} = useSelector(store => store.auth)
+
+    // If user is not logged in, redirect to login page
+    if (!user) {
+        return <Navigate to="/login" replace />
+    }
     return (
-        <div className='border-r-2  border-gray-900 w-72  shrink-0 h-screen'>
-            <div className="flex flex-col h-screen gap-10 mt-25 items-center">
-                <NavLink to={'/dashboard/profile'} className={({ isActive }) => `text-2xl text-center ${isActive ? 'bg-gray-900  text-gray-300' : "bg-transparent"} flex items-center gap-2 font-bold cursor-pointer px-15 py-2 rounded-xl `}>Profile</NavLink>
-                
-                <NavLink to={'/dashboard/your-blog'} className={({ isActive }) => `text-2xl text-center ${isActive ? 'bg-gray-900  text-gray-300' : "bg-transparent"} flex items-center gap-2 font-bold cursor-pointer px-15 py-2 rounded-xl `}>Your Blog</NavLink>
+        <div className="lg:static absolute lg:mb-0 mb-10 border-gray-900 w-full lg:w-72 shrink-0 h-fit lg:h-screen overflow-hidden ">
+            <div className="flex flex-row lg:flex-col h-auto lg:h-screen gap-0 lg:gap-10 mt-5 lg:mt-25 items-center justify-center lg:justify-start overflow-hidden ">
 
-                <NavLink to={'/dashboard/comments'} className={({ isActive }) => `text-2xl text-center ${isActive ? 'bg-gray-900  text-gray-300' : "bg-transparent"} flex items-center gap-2 font-bold cursor-pointer px-15 py-2 rounded-xl `}>Comments</NavLink>
+                <NavLink
+                    to="/dashboard/profile"
+                    className={({ isActive }) =>
+                        `text-sm sm:text-lg lg:text-2xl text-center ${isActive ? "bg-gray-900 text-gray-300" : "bg-transparent"
+                        } flex items-center gap-2 font-bold cursor-pointer px-3 sm:px-5 lg:px-15 py-2 rounded-sm whitespace-nowrap`
+                    }
+                >
+                    Profile
+                </NavLink>
 
-                <NavLink to={'/dashboard/write-blog'} className={({ isActive }) => `text-2xl text-center ${isActive ? 'bg-gray-900  text-gray-300' : "bg-transparent"} flex items-center gap-2 font-bold cursor-pointer px-15 py-2 rounded-xl `}>Create Blog</NavLink>
+                <NavLink
+                    to="/dashboard/your-blog"
+                    className={({ isActive }) =>
+                        `text-sm sm:text-lg lg:text-2xl text-center ${isActive ? "bg-gray-900 text-gray-300" : "bg-transparent"
+                        } flex items-center gap-2 font-bold cursor-pointer px-3 sm:px-5 lg:px-15 py-2 rounded-sm whitespace-nowrap`
+                    }
+                >
+                    Your Blog
+                </NavLink>
+
+                <NavLink
+                    to="/dashboard/comments"
+                    className={({ isActive }) =>
+                        `text-sm sm:text-lg lg:text-2xl text-center ${isActive ? "bg-gray-900 text-gray-300" : "bg-transparent"
+                        } flex items-center gap-2 font-bold cursor-pointer px-3 sm:px-5 lg:px-15 py-2 rounded-sm whitespace-nowrap`
+                    }
+                >
+                    Comments
+                </NavLink>
+
+                <NavLink
+                    to="/dashboard/write-blog"
+                    className={({ isActive }) =>
+                        `text-sm sm:text-lg lg:text-2xl text-center ${isActive ? "bg-gray-900 text-gray-300" : "bg-transparent"
+                        } flex items-center gap-2 font-bold cursor-pointer px-3 sm:px-5 lg:px-15 py-2 rounded-sm whitespace-nowrap`
+                    }
+                >
+                    Create Blog
+                </NavLink>
+
             </div>
         </div>
     )

@@ -56,8 +56,8 @@ const Signup = () => {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <Card className="w-full max-w-sm shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-shadow duration-300">
+        <div className="flex justify-center h-[80vh] items-center">
+            <Card className="w-full max-w-sm  shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-shadow duration-300 mx-5">
                 <CardHeader>
                     <CardTitle>Create an account</CardTitle>
                     <CardDescription>
@@ -123,7 +123,7 @@ const Signup = () => {
                 <CardFooter className="flex-col gap-2">
                     <Button
                         variant="outline"
-                        className="w-full border-black hover:bg-black hover:text-white transition-colors"
+                        className="w-full border-black hover:bg-gray-200 transition-colors"
                         onClick={() => navigate('/login')}
                     >
                         I already have an account

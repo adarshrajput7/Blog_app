@@ -7,11 +7,11 @@ import { Label } from "./ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select"
 import axios from "axios"
 import { toast } from "react-toastify"
-import { useNavigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { setLoading } from "@/redux/blogSlice"
 import { setBlog } from "@/redux/blogSlice"
-import { Loader } from "lucide-react"
+import { Loader} from "lucide-react"
 
 
 const CreateBlog = () => {
@@ -21,9 +21,10 @@ const CreateBlog = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { blog, loading } = useSelector(store => store.blog)
+  const { user } = useSelector(store => store.auth)
   console.log(blog);
-console.log(typeof blog);
-console.log(Array.isArray(blog));
+  console.log(typeof blog);
+  console.log(Array.isArray(blog));
 
 
   const categoryValue = (value) => {
@@ -42,7 +43,7 @@ console.log(Array.isArray(blog));
       if (res.data.success) {
         const newBlog = [...blog, res.data.blog]
         console.log(res.data.blog._id);
-        
+
         dispatch(setBlog(newBlog))
         navigate(`/dashboard/write-blog/${res.data.blog._id}`)
         toast.success(res.data.message)
@@ -55,12 +56,23 @@ console.log(Array.isArray(blog));
 
   }
 
+  // If user is not logged in, redirect to login page
+  if (!user) {
+    return <Navigate to="/login" replace />
+  }
+
 
   return (
-    <div className='p-4  h-screen  pt-20'>
-      <Card className='md:p-10 p-4 bg-gray-100'>
-        <h1>Lets Create a Blog</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus ex esse quia atque iste impedit vel, nemo aperiam omnis mollitia rerum et earum eos repellat architecto. At ullam ex excepturi.</p>
+    <div className='flex justify-center items-center p-4  h-screen w-full pt-20 lg:pt-10'>
+      <Card className='md:p-10 p-4 bg-gray-100 h-full w-full'>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-4xl">
+          Let’s Create Something Worth Reading
+        </h1>
+
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-gray-500 sm:text-base lg:text-lg">
+          Turn your thoughts into stories, share what inspires you, and build a blog
+          that gives your ideas a place to be heard.
+        </p>
 
         <div className='mt-10'>
           <div>

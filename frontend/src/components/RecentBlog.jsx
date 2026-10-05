@@ -1,108 +1,228 @@
-import { setBlog } from '@/redux/blogSlice'
-import axios from 'axios'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import BlogList from './BlogList'
-import { Badge } from './ui/badge'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
-import { Card } from './ui/card'
-import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { setBlog } from "@/redux/blogSlice";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import BlogList from "./BlogList";
+import { Badge } from "./ui/badge";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+const categories = [
+  "Cricket",
+  "Blogging",
+  "Bollywood",
+  "Sports",
+  "Digital Marketing",
+  "Photography",
+];
 
 const RecentBlog = () => {
-  const dispatch = useDispatch()
-  const { blog } = useSelector(store => store.blog)
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { blog } = useSelector((store) => store.blog);
+
+
+  const [email, setEmail] = useState("")
+  const [emailError, setEmailError] = useState("")
+
+  const handleSubscribe = () => {
+    const value = email.trim()
+
+    if (!value) {
+      setEmailError("Email is required")
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
+    if (!emailRegex.test(value)) {
+      setEmailError("Please enter a valid email address")
+      return
+    }
+
+    setEmailError("")
+    toast.success("Subscribed successfully!")
+    setEmail("")
+  }
+
+
+  // useEffect(() => {
+  //   const getBlogs = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         "http://localhost:8000/api/v1/blog/get-publishhed-blogs",
+  //         { withCredentials: true }
+  //       );
+
+  //       if (res.data.success) {
+  //         dispatch(setBlog(res.data.blogs));
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   getBlogs();
+  // },[], [dispatch]);
 
 
   useEffect(() => {
-    const getAllPublishedBlog = async () => {
-      try {
-        const res = await axios.get(`http://localhost:8000/api/v1/blog/get-publishhed-blogs`, { withCredentials: true })
-        console.log('allor', res.data.blogs);
-
-        if (res.data.success) {
-          dispatch(setBlog(res.data.blogs))
+  const getBlogs = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:8000/api/v1/blog/get-publishhed-blogs",
+        {
+          withCredentials: true,
         }
-      } catch (error) {
-        console.log(error);
+      );
 
+      console.log("BLOG API RESPONSE:", res.data);
+
+      if (res.data.success) {
+        dispatch(setBlog(res.data.blogs));
       }
+    } catch (error) {
+      console.log("BLOG API ERROR:", error);
+      console.log("STATUS:", error.response?.status);
+      console.log("ERROR DATA:", error.response?.data);
     }
+  };
 
-    getAllPublishedBlog()
-
-  }, [])
+  getBlogs();
+}, [dispatch]);
 
 
   return (
-    <>
-      <div className="flex flex-col items-center py-6">
-                <h1 className="text-4xl font-bold text-gray-800 dark:text-white">Recent Blogs</h1>
-                <hr className="w-20 h-1 mt-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" />
-            </div>
-      <div className=' flex gap-4 mb-5 px-40'>
-        <div className='w-300 '>
-          {
-            blog?.slice(0, 4)?.map((blog, index) => {
-              return <BlogList blog={blog} key={index} />
-            })
-          }
+    <section className="w-full px-2 py-8 sm:px-6 lg:px-10 xl:px-16">
+      {/* Heading */}
+      <div className="mb-7 text-center sm:mb-10">
+        <p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-purple-500">
+          Latest Articles
+        </p>
+
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
+          Recent Blogs
+        </h2>
+
+        <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-linear-to-r from-purple-500 to-pink-500" />
+      </div>
+
+      {/* Main Layout */}
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 lg:grid-cols-[1fr_340px] lg:gap-8 xl:grid-cols-[1fr_370px]">
+
+        {/* Recent Blogs */}
+        <div className="min-w-0 space-y-4">
+          {blog?.slice(0, 5)?.map((item) => (
+            <BlogList
+              key={item._id}
+              blog={item}
+            />
+          ))}
         </div>
-        <Card className='px-3 py-1 backdrop-blur-md border border-white/20 rounded-sm text-blue text-sm font-medium'>
-          {/* <Card className='bg-green-10 flex flex-col items-center w-110 mx-3 rounded-sm py-3'> */}
-          <h1 className='text-3xl mb-5'>Populor Catogory</h1>
-          <div className='flex flex-wrap gap-2 px-3'>
 
-            <Badge className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-sm text-blue text-sm font-medium">
-              Cricket
-            </Badge>
-            <Badge className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-sm text-blue text-sm font-medium">
-              Bloging
-            </Badge>
-            <Badge className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-sm text-blue text-sm font-medium">
-              Bollywood
-            </Badge>
-            <Badge className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-sm text-blue text-sm font-medium">
-              Sports
-            </Badge>
-            <Badge className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-sm text-blue text-sm font-medium">
-              Digital Marketing
-            </Badge>
-            <Badge className="px-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-sm text-blue text-sm font-medium">
-              Photograpy
-            </Badge>
+        {/* Sidebar */}
+        <aside className="h-fit space-y-5 lg:sticky lg:top-5">
 
+          {/* Categories */}
+          <div className="rounded-2xl border border-white/60 bg-white/40 p-5 shadow-sm backdrop-blur-xl sm:p-6">
+            <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
+              Popular Categories
+            </h3>
 
+            <div className="mt-4 flex flex-wrap gap-2">
+              {categories.map((category) => (
+                <Badge
+                  key={category}
+                  className="cursor-pointer rounded-full border border-gray-300/70 bg-white/60 px-3 py-1.5 text-xs font-medium text-gray-700 shadow-[0_4px_20px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-all duration-300 hover:border-gray-400 hover:bg-white/90 hover:text-gray-950 hover:shadow-[0_8px_25px_rgba(0,0,0,0.08)] sm:text-sm"
+                >
+                  {category}
+                </Badge>
+
+              ))}
+            </div>
           </div>
-          <div className='mt-10 px-2 '>
-            <h1 className='text-2xl font-semibold'>Subscribe to Newletter</h1>
-            <p className='text-gray-800 mt-2'>Get the latest post and updates delivered straight to your inbox</p>
-            <div className='flex gap-2 mt-5'>
-              <Input placeholder='Enter Your Mail Id' className='px-3  py-1 bg-linear-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-black/20 rounded-sm text-blue text-sm font-medium' />
+
+          {/* Newsletter */}
+          <div className="rounded-2xl border border-purple-100 bg-linear-to-br from-purple-50/80 via-white/70 to-pink-50/80 p-5 shadow-sm sm:p-6">
+            <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
+              Subscribe to Newsletter
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-gray-600">
+              Get the latest posts and updates delivered straight to your inbox.
+            </p>
+
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
+              <div className="min-w-0 flex-1">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    if (emailError) setEmailError("")
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSubscribe()
+                  }}
+                  className={`h-10 w-full rounded-lg bg-white/70 text-sm ${emailError ? "border-red-500 focus-visible:ring-red-500" : "border-gray-200"
+                    }`}
+                />
+
+                {emailError && (
+                  <p className="mt-1 text-xs text-red-500">
+                    {emailError}
+                  </p>
+                )}
+              </div>
+
               <Button
-                onClick={() => { toast.success('Subscribed') }}
-                className=" bg-purple-500/20 backdrop-blur-xl border border-purple-300/30  text-black text-sm font-medium hover:bg-purple-500/30 transition "
+                type="button"
+                onClick={handleSubscribe}
+                className="h-10 rounded-lg"
               >
                 Subscribe
               </Button>
             </div>
-            <div className='flex items-center flex-col mt-10'>
-              <h1 className='text-3xl'>Suggestion Blogs</h1>
-              {
-                blog?.slice(0, 6)?.map((blog, index) => {
-                  return <p onClick={() => navigate(`/blog/${blog._id}`)} key={index} className="px-3 mt-3 py-1 bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-white/20 rounded-sm text-blue text-md font-medium cursor-pointer hover:text-blue-700">
-                    { index+1}. {blog.title}
-                  </p>
-                })
-              }
+          </div>
+
+
+          {/* Suggestions */}
+          <div className="rounded-2xl border border-white/60 bg-white/40 p-5 shadow-sm backdrop-blur-xl sm:p-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
+                Suggested Blogs
+              </h3>
+
+              <span className="text-xs text-gray-400">
+                {Math.min(blog?.length || 0, 6)} posts
+              </span>
+            </div>
+
+            <div className="mt-4 space-y-2">
+              {blog?.slice(0, 6)?.map((item, index) => (
+                <button
+                  key={item._id}
+                  onClick={() => navigate(`/blog/${item._id}`)}
+                  className="group flex w-full items-start gap-3 rounded-xl p-2.5 text-left transition hover:bg-white/70"
+                >
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-purple-100 text-xs font-semibold text-purple-600">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <span className="line-clamp-2 text-sm font-medium leading-5 text-gray-700 transition group-hover:text-purple-600">
+                    {item.title}
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
-        </Card>
+        </aside>
       </div>
-    </>
-  )
-}
+    </section>
+  );
+};
 
-export default RecentBlog
+export default RecentBlog;

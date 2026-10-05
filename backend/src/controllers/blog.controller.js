@@ -272,34 +272,82 @@ export const getBlogWithLikeStatus = async () => {
 //     }
 // }
 
+
+
+
+//+++++++++++++++++++++
+
+// export const getPublishedBlog = async (req, res) => {
+//     try {
+//         // Schema mein "isPublisihed" hai toh wahi use karein
+//         const blogs = await BlogModel.find({ isPublished: false }) 
+//             .sort({ createdAt: -1 })
+//             .populate({ path: "author", select: "fullName photoUrl" })
+            
+//         if (!blogs || blogs.length === 0) {
+//             return res.status(404).json({
+//                 message: 'No unpublished blogs found',
+//                 success: false
+//             })
+//         }
+        
+//         return res.status(200).json({
+//             message: 'Unpublished blogs fetched successfully',
+//             success: true, 
+//             blogs,
+//             blogs_len:blogs.length
+//         })
+//     } catch (error) {
+//         console.error(error); // Debugging ke liye
+//         return res.status(500).json({
+//             message: 'Failed to get unpublished blogs',
+//             error: error.message,
+//             success: false
+//         })
+//     }
+// }
+
+
+
 export const getPublishedBlog = async (req, res) => {
     try {
-        // Schema mein "isPublisihed" hai toh wahi use karein
-        const blogs = await BlogModel.find({ isPublished: false }) 
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
+        const skip = (page - 1) * limit;
+
+        const blogs = await BlogModel.find({ isPublished: false })
             .sort({ createdAt: -1 })
-            .populate({ path: "author", select: "fullName photoUrl" })
-            
-        if (!blogs || blogs.length === 0) {
-            return res.status(404).json({
-                message: 'No unpublished blogs found',
-                success: false
-            })
-        }
-        
+            .skip(skip)
+            .limit(limit)
+            .populate({
+                path: "author",
+                select: "fullName photoUrl"
+            });
+
+        const totalBlogs = await BlogModel.countDocuments({
+            isPublished: false
+        });
+
         return res.status(200).json({
-            message: 'Unpublished blogs fetched successfully',
-            success: true, 
+            message: "Blogs fetched successfully",
+            success: true,
             blogs,
-            blogs_len:blogs.length
-        })
+            blogs_len: blogs.length,
+            currentPage: page,
+            totalBlogs,
+            hasMore: skip + blogs.length < totalBlogs
+        });
+
     } catch (error) {
-        console.error(error); // Debugging ke liye
+        console.error(error);
+
         return res.status(500).json({
-            message: 'Failed to get unpublished blogs',
+            message: "Failed to get blogs",
             error: error.message,
             success: false
-        })
+        });
     }
-}
+};
+
 
 

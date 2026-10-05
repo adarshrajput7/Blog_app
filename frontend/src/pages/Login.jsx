@@ -55,8 +55,8 @@ const Login = () => {
     }
 
     return (
-        <div className="flex justify-center items-center h-screen">
-            <Card className="w-full max-w-sm shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+        <div className="flex justify-center items-center h-[70vh]">
+            <Card className="w-full max-w-sm shadow-[0_20px_50px_rgba(0,0,0,0.3)] mx-5">
                 <CardHeader>
                     <CardTitle>Welcome back</CardTitle>
                     <CardDescription>
