@@ -1,12 +1,12 @@
 import { setBlog } from "@/redux/blogSlice";
-import axios from "axios";
+import axios from "../api/axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BlogList from "./BlogList";
 import { Badge } from "./ui/badge";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 const categories = [
@@ -48,31 +48,12 @@ const RecentBlog = () => {
   }
 
 
-  // useEffect(() => {
-  //   const getBlogs = async () => {
-  //     try {
-  //       const res = await axios.get(
-  //         "https://blog-app-sjs3.onrender.com/api/v1/blog/get-publishhed-blogs",
-  //         { withCredentials: true }
-  //       );
-
-  //       if (res.data.success) {
-  //         dispatch(setBlog(res.data.blogs));
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-
-  //   getBlogs();
-  // },[], [dispatch]);
-
 
   useEffect(() => {
   const getBlogs = async () => {
     try {
       const res = await axios.get(
-        "https://blog-app-sjs3.onrender.com/api/v1/blog/get-publishhed-blogs",
+        "/api/v1/blog/get-publishhed-blogs",
         {
           withCredentials: true,
         }

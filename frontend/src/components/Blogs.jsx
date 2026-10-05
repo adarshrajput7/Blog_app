@@ -60,7 +60,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import BlogCard from "./BlogCard";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 import { setBlog } from "@/redux/blogSlice";
 import { Loader2 } from "lucide-react";
 
@@ -77,7 +77,7 @@ const Blogs = () => {
       setLoading(true);
 
       const res = await axios.get(
-        `https://blog-app-sjs3.onrender.com/api/v1/blog/get-publishhed-blogs?page=${pageNumber}`,
+        `/api/v1/blog/get-publishhed-blogs?page=${pageNumber}`,
         {
           withCredentials: true,
         }

@@ -1,5 +1,5 @@
 import { Bookmark, Share, Star } from "lucide-react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 // import { Bookmark, Heart } from "lucide-react";
 // import { Avatar, AvatarImage } from "./ui/avatar";

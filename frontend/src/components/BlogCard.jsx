@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom"
 import { Bookmark,  Heart } from "lucide-react"
-import axios from "axios"
-import { toast } from "react-toastify"
+import axios from "../api/axios"
 import { useDispatch, useSelector } from "react-redux"
 import { updateSingleBlog } from "@/redux/blogSlice"
 import { FcLike } from "react-icons/fc"
 import { useState, useEffect } from "react"
+import toast from "react-hot-toast"
 
 const BlogCard = ({ blog }) => {
   console.log("amal", blog);
@@ -35,7 +35,7 @@ const BlogCard = ({ blog }) => {
 
     try {
       const res = await axios.post(
-        `https://blog-app-sjs3.onrender.com/api/v1/blog/${blog._id}`,
+        `/api/v1/blog/${blog._id}`,
         {},
         {
           headers: {

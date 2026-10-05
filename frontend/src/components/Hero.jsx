@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowDown, ArrowUpRight, PenLine } from "lucide-react";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../api/axios.js";
 
 const Hero = () => {
 
@@ -15,7 +15,7 @@ const Hero = () => {
     const getTotalBlogs = async () => {
     try {
       const res = await axios.get(
-        "https://blog-app-sjs3.onrender.com/api/v1/blog/get-publishhed-blogs",
+        "/api/v1/blog/get-publishhed-blogs",
         {
           withCredentials: true,
         }
@@ -33,7 +33,7 @@ const Hero = () => {
       const getAllUsers = async () => {
         try {
           const res = await axios.get(
-            "https://blog-app-sjs3.onrender.com/api/v1/user/all-users"
+            "/api/v1/user/all-users"
           );
   
           if (res.data.success) {

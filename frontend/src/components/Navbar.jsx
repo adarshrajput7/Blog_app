@@ -1,10 +1,10 @@
-import { Search,  X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import axios from "axios";
-import { toast } from "react-toastify";
+import axios from "../api/axios";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/authSlice";
 import {
@@ -66,7 +66,7 @@ const Navbar = () => {
     const logoutHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.get("https://blog-app-sjs3.onrender.com/api/v1/user/logout", {
+            const res = await axios.get("/api/v1/user/logout", {
                 withCredentials: true,
             });
             if (res.data.success) {
@@ -197,13 +197,25 @@ const Navbar = () => {
                     </div>
 
                     {/* Navigate links */}
-                    <div className={`${navOpen ? "flex translate-x-0" : "flex translate-x-full pointer-events-none"}cursor-pointer md:flex md:translate-x-0 flex-col md:flex-row fixed md:static top-16 right-0 w-full md:w-auto items-center gap-8 md:gap-15 p-8 md:p-0 rounded-b-sm md:rounded-none text-xl transition-transform duration-500 z-50 md:bg-transparent bg-white  `}>
+                    <div className={`${navOpen ? "flex translate-x-0 text-5xl" : "flex translate-x-full pointer-events-none"}cursor-pointer md:flex md:translate-x-0 flex-col md:flex-row fixed md:static top-16 right-0 w-full md:w-auto items-center gap-8 md:gap-15 p-8 md:p-0 rounded-b-sm md:rounded-none text-xl transition-transform duration-500 z-50 md:bg-transparent bg-white`}>
 
-                        <Link to={'/'} onClick={() => { setNavOpen(false) }} className="cursor-pointer relative font-semibold after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full">Home</Link>
-                        <Link onClick={() => { navigate('/blogs'); setNavOpen(false) }} className="relative font-semibold after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
-                        <Link onClick={() => { navigate('/about'); setNavOpen(false) }} className="relative font-semibold after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full">About</Link>
-                        <p className="text-xs text-gray-600 absolute bottom-0 lg:hidden" >Made with <span className="text-red-500 ">♥</span> for curious minds.</p>
+                        <Link to={'/'} onClick={() => { setNavOpen(false) }} className={`${navOpen ? "text-4xl text-gray-600" : "text-xl"} cursor-pointer relative font-semibold after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full`}>Home</Link>
+                        <Link onClick={() => { navigate('/blogs'); setNavOpen(false) }} className={`${navOpen ? "text-4xl text-gray-600" : "text-xl"} relative font-semibold after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full`}>Blogs</Link>
+                        <Link onClick={() => { navigate('/about'); setNavOpen(false) }} className={`${navOpen ? "text-4xl text-gray-600 mb-5" : "text-xl"} relative font-semibold after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full `}>About</Link>
+                        <p className={`${navOpen ? "text-xs text-gray-600 absolute bottom-5" : "hidden"}`}>Made with <span className="text-red-500">♥</span> for curious minds.</p>
                     </div>
+
+                    {/* <div className={`${navOpen ? "flex translate-x-0 h-fit" : "flex translate-x-full pointer-events-none"} md:flex md:translate-x-0 flex-col md:flex-row w-full fixed md:static top-16 right-0 md:w-auto items-center gap-8 md:gap-15 p-8 md:p-0 rounded-b-sm md:rounded-none transition-transform duration-500 z-50 bg-white md:bg-transparent`}>
+                        <Link to="/" onClick={() => setNavOpen(false)} className={`relative font-semibold ${navOpen ? "text-4xl text-gray-600" : "text-xl"} md:text-xl after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full`}>Home</Link>
+                        <Link to="/blogs" onClick={() => setNavOpen(false)} className={`relative font-semibold ${navOpen ? "text-4xl text-gray-600" : "text-xl"} md:text-xl after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full`}>Blog</Link>
+                        <Link to="/about" onClick={() => setNavOpen(false)} className={`relative font-semibold ${navOpen ? "text-4xl text-gray-600 mb-5" : "text-xl"} md:text-xl after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-0 after:-translate-x-1/2 after:bg-black after:transition-all after:duration-300 hover:after:w-full`}>About</Link>
+                        <p className={`${navOpen ? "text-xs text-gray-600 absolute bottom-5" : "hidden"}`}>Made with <span className="text-red-500">♥</span> for curious minds.</p>
+                    </div> */}
+
+
+
+
+
 
                     {/* Profile */}
 

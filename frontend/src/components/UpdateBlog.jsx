@@ -5,7 +5,7 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { useRef, useState } from "react"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from './ui/select';
-import axios from 'axios';
+import axios from '../api/axios';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -66,7 +66,7 @@ const UpdateBlog = () => {
 
         try {
             dispatch(setLoading(true))
-            const res = await axios.put(`https://blog-app-sjs3.onrender.com/api/v1/blog/${id}`, formData, {
+            const res = await axios.put(`/api/v1/blog/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }, withCredentials: true
@@ -87,13 +87,14 @@ const UpdateBlog = () => {
 
 
     return (
-        <div className="md:px-3 h-screen lg:w-[calc(85vw-72px)] overflow-y-auto pb-10 w-screen md:pt-10 md:mt-0 mt-13">
+        // <div className="md:px-3 h-screen lg:w-[calc(85vw-72px)] overflow-y-auto pb-10 w-screen md:pt-10 md:mt-0 mt-13">
+        <div className="w-full min-h-screen px-3 py-4 sm:px-4 md:px-5 mt-13 lg:mt-0 lg:px-6">
             <div className="w-mx-auto pb-5">
                 <Card className='w-full dark:bg-gray-900 p-5 space-y-1'>
                     <h1 className='md:text-3xl text-xl'>Basic Blog Information</h1>
-                    <p className='md:text-xl text-sm '>Makes changes to your blog here. Click publish when you are done</p>
+                    <p className='md:text-xl text-sm '>Makes changes to your blog here. Click on save when you are done</p>
                     <div className="space-x-2">
-                        <Button>Publish</Button>
+                        {/* <Button>Publish</Button> */}
                         <Button variant="destructive"><Trash2 />Remove blog</Button>
                     </div>
                     <div>

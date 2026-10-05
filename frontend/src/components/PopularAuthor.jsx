@@ -1,12 +1,11 @@
 
-import axios from "axios";
+import axios from "../api/axios.js";
 import { useEffect, useState } from "react";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogTrigger } from "./ui/alert-dialog";
 import { Eye, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { FaFacebookSquare, FaGithubSquare, FaInstagram, FaLinkedin } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { MdVerified } from "react-icons/md";
 
 const PopularAuthor = () => {
@@ -16,7 +15,7 @@ const PopularAuthor = () => {
     const getAllUsers = async () => {
       try {
         const res = await axios.get(
-          "https://blog-app-sjs3.onrender.com/api/v1/user/all-users"
+          "/api/v1/user/all-users"
         );
 
         if (res.data.success) {
@@ -92,33 +91,44 @@ const PopularAuthor = () => {
                     </p>
 
                     <div className="flex items-center justify-between pt-2">
-                      <div className="flex gap-3 text-gray-400">
-                        <Link className="transition hover:scale-110 hover:text-white">
-                          <FaInstagram size={22} />
-                        </Link>
 
-                        <Link className="transition hover:scale-110 hover:text-white">
-                          <FaFacebookSquare size={22} />
-                        </Link>
+                      <div className="flex items-center gap-1.5">
+                        <div className="relative group">
+                          <a href={author?.instagram || undefined} target={author?.instagram ? "_blank" : undefined} rel={author?.instagram ? "noopener noreferrer" : undefined} onClick={(e) => !author?.instagram && e.preventDefault()} className={`relative flex items-center justify-center p-1 rounded transition-all duration-200 ${author?.instagram ? "cursor-pointer text-pink-500 hover:text-pink-400 hover:scale-110 active:scale-95" : "cursor-not-allowed text-gray-500/40"}`}>
+                            <FaInstagram size={20} />
+                            {!author?.instagram && <span className="absolute w-5 h-0.5 bg-red-500/80 rotate-45 rounded-full pointer-events-none" />}
+                          </a>
+                          <span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-black/90 px-1.5 py-0.5 text-[10px] text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 z-50">{author?.instagram ? "Instagram" : "Not Linked"}</span></div>
 
-                        <Link className="transition hover:scale-110 hover:text-white">
-                          <FaGithubSquare size={22} />
-                        </Link>
+                        <div className="relative group">
+                          <a href={author?.facebook || undefined} target={author?.facebook ? "_blank" : undefined} rel={author?.facebook ? "noopener noreferrer" : undefined} onClick={(e) => !author?.facebook && e.preventDefault()} className={`relative flex items-center justify-center p-1 rounded transition-all duration-200 ${author?.facebook ? "cursor-pointer text-blue-500 hover:text-blue-400 hover:scale-110 active:scale-95" : "cursor-not-allowed text-gray-500/40"}`}>
+                            <FaFacebookSquare size={20} />
+                            {!author?.facebook && <span className="absolute w-5 h-0.5 bg-red-500/80 rotate-45 rounded-full pointer-events-none" />}</a><span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-black/90 px-1.5 py-0.5 text-[10px] text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 z-50">{author?.facebook ? "Facebook" : "Not Linked"}
+                          </span></div>
 
-                        <Link className="transition hover:scale-110 hover:text-white">
-                          <FaLinkedin size={22} />
-                        </Link>
+                        <div className="relative group">
+                          <a href={author?.github || undefined} target={author?.github ? "_blank" : undefined} rel={author?.github ? "noopener noreferrer" : undefined} onClick={(e) => !author?.github && e.preventDefault()} className={`relative flex items-center justify-center p-1 rounded transition-all duration-200 ${author?.github ? "cursor-pointer text-white hover:text-gray-300 hover:scale-110 active:scale-95 drop-shadow-[0_2px_4px_rgba(255,255,255,0.3)]" : "cursor-not-allowed text-gray-500/40"}`}>
+                          <FaGithubSquare size={20} />
+                          {!author?.github && <span className="absolute w-5 h-0.5 bg-red-500/80 rotate-45 rounded-full pointer-events-none" />}</a><span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-black/90 px-1.5 py-0.5 text-[10px] text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 z-50">{author?.github ? "GitHub" : "Not Linked"}
+                          </span></div>
+
+                        <div className="relative group"><a href={author?.linkedin || undefined} target={author?.linkedin ? "_blank" : undefined} rel={author?.linkedin ? "noopener noreferrer" : undefined} onClick={(e) => !author?.linkedin && e.preventDefault()} className={`relative flex items-center justify-center p-1 rounded transition-all duration-200 ${author?.linkedin ? "cursor-pointer text-sky-400 hover:text-sky-300 hover:scale-110 active:scale-95" : "cursor-not-allowed text-gray-500/40"}`}>
+                          <FaLinkedin size={20} />
+                          {!author?.linkedin && <span className="absolute w-5 h-0.5 bg-red-500/80 rotate-45 rounded-full pointer-events-none" />}
+                        </a><span className="pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-black/90 px-1.5 py-0.5 text-[10px] text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100 z-50">{author?.linkedin ? "LinkedIn" : "Not Linked"}</span></div>
                       </div>
+
 
                       <AlertDialogCancel className="p-0">
                         <button
-                          onClick={() => toast.warning("This Features is under process")}
+                          onClick={() => toast.error("This Feature is under process")}
                           className="rounded-md bg-white px-4 py-1.5 text-sm font-medium text-black transition hover:bg-gray-200"
                         >
                           Follow
                         </button>
                       </AlertDialogCancel>
                     </div>
+
                   </div>
                 </AlertDialogDescription>
 

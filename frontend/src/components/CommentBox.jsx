@@ -4,10 +4,10 @@ import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { useEffect, useState } from "react"
-import axios from "axios"
+import axios from "../api/axios"
 import { setComment } from "@/redux/commentSlice"
 import { setBlog } from "@/redux/blogSlice"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import { EllipsisVertical, Trash2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { FaEdit, FaRegHeart } from "react-icons/fa"
@@ -60,7 +60,7 @@ const CommentBox = ({ selectedBlog }) => {
     const createCommentHandler = async () => {
         try {
             const res = await axios.post(
-                `https://blog-app-sjs3.onrender.com/api/v1/comment/${selectedBlog._id}/create`,
+                `/api/v1/comment/${selectedBlog._id}/create`,
                 { content },
                 {
                     headers: {
@@ -108,7 +108,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const getCommentsAllPost = async () => {
         try {
-            const res = await axios.get(`https://blog-app-sjs3.onrender.com/api/v1/comment/${selectedBlog._id}/all`, {
+            const res = await axios.get(`/api/v1/comment/${selectedBlog._id}/all`, {
                 withCredentials: true
             })
             dispatch(setComment(res.data.comments))
@@ -119,7 +119,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const deleteComment = async (commentId) => {
         try {
-            const res = await axios.delete(`https://blog-app-sjs3.onrender.com/api/v1/comment/${commentId}/delete`, {
+            const res = await axios.delete(`/api/v1/comment/${commentId}/delete`, {
                 withCredentials: true
             })
 
@@ -160,7 +160,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const editCommentHandler = async (id) => {
         try {
-            const res = await axios.put(`https://blog-app-sjs3.onrender.com/api/v1/comment/${id}/edit`, { content: editingContent }, {
+            const res = await axios.put(`/api/v1/comment/${id}/edit`, { content: editingContent }, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json"
@@ -190,7 +190,7 @@ const CommentBox = ({ selectedBlog }) => {
         }
 
         try {
-            const res = await axios.get(`https://blog-app-sjs3.onrender.com/api/v1/comment/${id}/like`, { withCredentials: true })
+            const res = await axios.get(`/api/v1/comment/${id}/like`, { withCredentials: true })
             if (res.data.success) {
                 const updatedComentData = res.data.updatedComment
                 const updatedComentList = comment.map(item => item._id === id ? updatedComentData : item)

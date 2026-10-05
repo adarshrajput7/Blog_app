@@ -17,12 +17,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import axios from "axios"
+import axios from "../api/axios"
 import { setBlog } from "@/redux/blogSlice"
 import { useEffect } from "react"
-import { Ellipsis, EllipsisVertical, Loader2, SquarePen, Trash2 } from "lucide-react"
+import { Ellipsis, EllipsisVertical, FileText, Loader2, SquarePen, Trash2 } from "lucide-react"
 import { Navigate, useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import { MdDateRange } from "react-icons/md"
 
 
@@ -37,7 +37,7 @@ const YourBlog = () => {
 
   const getOwnBlogs = async () => {
     try {
-      const res = await axios.get(`https://blog-app-sjs3.onrender.com/api/v1/blog/get-own-blogs`, { withCredentials: true })
+      const res = await axios.get(`/api/v1/blog/get-own-blogs`, { withCredentials: true })
       if (res.data.success) {
         dispatch(setBlog(res.data.blogs))
       }
@@ -48,7 +48,7 @@ const YourBlog = () => {
 
   const deleteBlog = async (id) => {
     try {
-      const res = await axios.delete(`https://blog-app-sjs3.onrender.com/api/v1/blog/delete/${id}`, { withCredentials: true })
+      const res = await axios.delete(`/api/v1/blog/delete/${id}`, { withCredentials: true })
       if (res.data.success) {
         const updatedBlogData = blog.filter((blogItem) => blogItem?._id !== id)
         dispatch(setBlog(updatedBlogData))
@@ -73,6 +73,39 @@ const YourBlog = () => {
       </div>
     )
   }
+ 
+ if (!blog || blog.length === 0) {
+  return (
+    <div className="absolute inset-0 lg:left-72 flex items-center justify-center p-4">
+
+      <div className="flex w-full max-w-md flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm sm:p-10">
+
+        <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
+          <FileText className="h-8 w-8 text-gray-400" />
+        </div>
+
+        <h2 className="text-2xl font-bold text-gray-900">
+          No Blogs Found
+        </h2>
+
+        <p className="mt-2 text-sm leading-6 text-gray-500 sm:text-base">
+          You haven't created any blogs yet. Start writing your first blog
+          and share your thoughts with the world.
+        </p>
+
+        <Button
+          onClick={() => navigate("/dashboard/write-blog")}
+          className="mt-6 w-full sm:w-auto"
+        >
+          Create Your First Blog
+        </Button>
+
+      </div>
+    </div>
+  )
+}
+
+
 
   // If user is not logged in, redirect to login page
   if (!user) {
@@ -81,8 +114,8 @@ const YourBlog = () => {
 
   return (
     <>
-      <div className="h-screen md:w-[calc(100vw-300px)]  flex overflow-y-auto md:mt-0 mt-10 md:pb-50 hidden md:block">
-        <div className='p-4  h-screen w-screen md:w-full'>
+      <div className="md:w-[calc(100vw-300px)]  flex overflow-y-auto md:mt-0 mt-10  hidden md:block  h-fit">
+        <div className='p-4 h-fit w-screen md:w-full'>
           <Card className='md:p-10  p-4 w-full bg-gray-100 '>
             <Table className='md:block'>
               <TableCaption>A list of your recent Blogs.</TableCaption>
@@ -142,7 +175,7 @@ const YourBlog = () => {
       </div>
 
 
-      <div className="grid md:grid-cols-2 md:block lg:hidden mb-100 p-3 mt-15">
+      <div className="grid md:grid-cols-2 md:block lg:hidden  p-3 mt-15">
 
         {blog.map((item, index) => (
           <div key={index} className="shadow-lg py-2 px-2 mb-3">

@@ -18,8 +18,8 @@ import { Input } from "@/components/ui/input"
 import { useDispatch, useSelector } from "react-redux"
 import { Textarea } from "./ui/textarea"
 import { useState } from "react"
-import axios from "axios"
-import { toast } from "react-toastify"
+import axios from "../api/axios"
+import toast from "react-hot-toast"
 import { setLoading, setUser } from "@/redux/authSlice"
 import { Loader2, Plus } from "lucide-react"
 import { Badge } from "./ui/badge"
@@ -72,7 +72,7 @@ const Profile = () => {
 
         try {
             dispatch(setLoading(true))
-            const res = await axios.put(`https://blog-app-sjs3.onrender.com/api/v1/user/profile/update`, formData, {
+            const res = await axios.put(`/api/v1/user/profile/update`, formData, {
                 headers: {
                     'Content-Type': "multipart/form-data"
                 }, withCredentials: true
@@ -148,7 +148,8 @@ const Profile = () => {
                                         <FaInstagram className="text-pink-600" /> Instagram
                                     </Label>
                                     <Input id="instagram" name="instagram" value={input.instagram}
-                                        onChange={eventChangeHandler} />
+                                        onChange={eventChangeHandler}
+                                    placeholder="Enter Url"/>
                                 </div>
                                 <div>
                                     <Label htmlFor="github" className="text-sm font-medium flex items-center gap-1.5">
@@ -157,6 +158,7 @@ const Profile = () => {
                                     <Input id="github" name="github"
                                         value={input.github}
                                         onChange={eventChangeHandler}
+                                        placeholder="Github Url"
                                     />
                                 </div>
                             </div>
@@ -169,6 +171,7 @@ const Profile = () => {
                                     <Input id="facebook" name="facebook"
                                         value={input.facebook}
                                         onChange={eventChangeHandler}
+                                        placeholder="Facebook Url"
                                     />
                                 </div>
                                 <div>
@@ -176,7 +179,9 @@ const Profile = () => {
                                         <AiOutlineLinkedin className="text-blue-600" /> LinkedIn
                                     </Label>
                                     <Input id="linkedin" name="linkedin" value={input.linkedin}
-                                        onChange={eventChangeHandler} />
+                                        onChange={eventChangeHandler} 
+                                        placeholder="Linkedin Url"
+                                        />
                                 </div>
                             </div>
 

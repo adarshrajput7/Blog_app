@@ -5,8 +5,8 @@ import { Card } from "./ui/card"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select"
-import axios from "axios"
-import { toast } from "react-toastify"
+import axios from "../api/axios"
+import toast from "react-hot-toast"
 import { Navigate, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { setLoading } from "@/redux/blogSlice"
@@ -34,7 +34,7 @@ const CreateBlog = () => {
     e.preventDefault()
     try {
       dispatch(setLoading(true))
-      const res = await axios.post(`https://blog-app-sjs3.onrender.com/api/v1/blog`, { title, category: categoryInput }, {
+      const res = await axios.post(`/api/v1/blog`, { title, category: categoryInput }, {
         headers: {
           'Content-Type': 'application/json'
         }, withCredentials: true

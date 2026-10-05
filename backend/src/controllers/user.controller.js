@@ -196,13 +196,21 @@ export const updateProfile = async (req, res) => {
             user.photoUrl = cloudinaryResponse.secure_url
         }
 
-        if (fullName) user.fullName = fullName
-        if (occupation) user.occupation = occupation
-        if (instagram) user.instagram = instagram
-        if (facebook) user.facebook = facebook
-        if (github) user.github = github
-        if (linkedin) user.linkedin = linkedin
-        if (bio) user.bio = bio
+        // if (fullName) user.fullName = fullName
+        // if (occupation) user.occupation = occupation
+        // if (instagram) user.instagram = instagram
+        // if (facebook) user.facebook = facebook
+        // if (github) user.github = github
+        // if (linkedin) user.linkedin = linkedin
+        // if (bio) user.bio = bio
+
+        if (fullName !== undefined) user.fullName = fullName;
+        if (occupation !== undefined) user.occupation = occupation;
+        if (instagram !== undefined) user.instagram = instagram;
+        if (facebook !== undefined) user.facebook = facebook;
+        if (github !== undefined) user.github = github;
+        if (linkedin !== undefined) user.linkedin = linkedin;
+        if (bio !== undefined) user.bio = bio;
 
         await user.save()
 
@@ -227,10 +235,10 @@ export const getAllUsers = async (req, res) => {
     try {
         const users = await UserModel.find().select('-password')
 
-        
+
         return res.status(200).json({
             success: true,
-            total:users.length,
+            total: users.length,
             message: 'user list getched successfully',
             users
         })
@@ -238,8 +246,8 @@ export const getAllUsers = async (req, res) => {
         console.log("error fething eror", error);
         return res.status(500).json({
             success: true,
-            message:'Failed to fetch users'
+            message: 'Failed to fetch users'
         })
-        
+
     }
 }

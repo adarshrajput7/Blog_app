@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "../api/axios"
 import { useEffect, useState } from "react"
 import { Card } from "./ui/card"
 
@@ -28,7 +28,7 @@ const Comments = () => {
   useEffect(() => {
     const getMyOwnAllCommentsOnMyBlog = async () => {
       try {
-        const res = await axios.get(`https://blog-app-sjs3.onrender.com/api/v1/comment/get-all-comments`, { withCredentials: true })
+        const res = await axios.get(`/api/v1/comment/get-all-comments`, { withCredentials: true })
         if (res.data.success) {
           console.log('All Comment my own blog', res.data);
           setGetComment(res.data.comments)
@@ -49,6 +49,17 @@ const Comments = () => {
       </div>
     )
   }
+
+  if (!getComment || getComment.length === 0) {
+  return (
+    <div className="flex w-full items-center justify-center py-10 mt-20">
+      <p className="text-lg font-semibold text-gray-500">
+        No Comments Found
+      </p>
+    </div>
+  )
+}
+
 
   // If user is not logged in, redirect to login page
   if (!user) {

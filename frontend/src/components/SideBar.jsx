@@ -11,8 +11,11 @@ const SideBar = () => {
         return <Navigate to="/login" replace />
     }
     return (
-        <div className="lg:static absolute lg:mb-0 mb-10 border-gray-900 w-full lg:w-72 shrink-0 h-fit lg:h-screen overflow-hidden ">
-            <div className="flex flex-row lg:flex-col h-auto lg:h-screen gap-0 lg:gap-10 mt-5 lg:mt-25 items-center justify-center lg:justify-start overflow-hidden ">
+        // <div className="lg:static absolute lg:mb-0 mb-10 border-gray-900 w-full lg:w-72 shrink-0 h-fit lg:h-screen overflow-hidden ">
+        //     <div className="flex flex-row lg:flex-col h-auto lg:h-screen gap-0 lg:gap-10 mt-5 lg:mt-25 items-center justify-center lg:justify-start overflow-hidden ">
+
+        <div className="absolute lg:fixed lg:left-0 lg:top-0 lg:z-50 lg:w-72 w-full shrink-0 h-fit lg:h-screen overflow-hidden border-gray-900 mb-10 lg:mb-0">
+    <div className="flex flex-row lg:flex-col h-auto lg:h-screen gap-0 lg:gap-10 mt-5 lg:mt-25 items-center justify-center lg:justify-start overflow-hidden">
 
                 <NavLink
                     to="/dashboard/profile"

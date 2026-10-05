@@ -14,8 +14,8 @@ import { Button } from "./ui/button";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { MdOutlineShare } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import axios from "../api/axios";
+import toast from "react-hot-toast";
 import { updateSingleBlog } from "@/redux/blogSlice";
 import { FcLike } from "react-icons/fc";
 import CommentBox from "./CommentBox";
@@ -75,7 +75,7 @@ const BlogView = () => {
         
         try {
             const res = await axios.post(
-                `https://blog-app-sjs3.onrender.com/api/v1/blog/${selectedBlog._id}`,
+                `/api/v1/blog/${selectedBlog._id}`,
                 {},
                 {
                     headers: {
@@ -122,7 +122,7 @@ const BlogView = () => {
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbPage className='line-clamp-1 md:max-w-full max-w-60 overflow-hidden text-blue-500 md:text-sm text-xs'>{selectedBlog.title}</BreadcrumbPage>
+                            <BreadcrumbPage className='line-clamp-1 md:max-w-full wrap-anywhere max-w-60 overflow-hidden text-blue-500 md:text-sm text-xs'>{selectedBlog.title}</BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
