@@ -35,7 +35,7 @@ const BlogCard = ({ blog }) => {
 
     try {
       const res = await axios.post(
-        `https://blog-app-sjs3.onrender.com//api/v1/blog/${blog._id}`,
+        `https://blog-app-sjs3.onrender.com/api/v1/blog/${blog._id}`,
         {},
         {
           headers: {

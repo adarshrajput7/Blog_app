@@ -75,7 +75,7 @@ const BlogView = () => {
         
         try {
             const res = await axios.post(
-                `https://blog-app-sjs3.onrender.com//api/v1/blog/${selectedBlog._id}`,
+                `https://blog-app-sjs3.onrender.com/api/v1/blog/${selectedBlog._id}`,
                 {},
                 {
                     headers: {

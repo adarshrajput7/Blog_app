@@ -52,7 +52,7 @@ const RecentBlog = () => {
   //   const getBlogs = async () => {
   //     try {
   //       const res = await axios.get(
-  //         "https://blog-app-sjs3.onrender.com//api/v1/blog/get-publishhed-blogs",
+  //         "https://blog-app-sjs3.onrender.com/api/v1/blog/get-publishhed-blogs",
   //         { withCredentials: true }
   //       );
 
@@ -72,7 +72,7 @@ const RecentBlog = () => {
   const getBlogs = async () => {
     try {
       const res = await axios.get(
-        "https://blog-app-sjs3.onrender.com//api/v1/blog/get-publishhed-blogs",
+        "https://blog-app-sjs3.onrender.com/api/v1/blog/get-publishhed-blogs",
         {
           withCredentials: true,
         }

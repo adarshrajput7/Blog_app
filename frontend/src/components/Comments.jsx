@@ -28,7 +28,7 @@ const Comments = () => {
   useEffect(() => {
     const getMyOwnAllCommentsOnMyBlog = async () => {
       try {
-        const res = await axios.get(`https://blog-app-sjs3.onrender.com//api/v1/comment/get-all-comments`, { withCredentials: true })
+        const res = await axios.get(`https://blog-app-sjs3.onrender.com/api/v1/comment/get-all-comments`, { withCredentials: true })
         if (res.data.success) {
           console.log('All Comment my own blog', res.data);
           setGetComment(res.data.comments)
