@@ -15,7 +15,7 @@ const Hero = () => {
     const getTotalBlogs = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/v1/blog/get-publishhed-blogs",
+        "https://blog-app-sjs3.onrender.com//api/v1/blog/get-publishhed-blogs",
         {
           withCredentials: true,
         }
@@ -33,7 +33,7 @@ const Hero = () => {
       const getAllUsers = async () => {
         try {
           const res = await axios.get(
-            "http://localhost:8000/api/v1/user/all-users"
+            "https://blog-app-sjs3.onrender.com//api/v1/user/all-users"
           );
   
           if (res.data.success) {

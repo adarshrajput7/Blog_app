@@ -11,7 +11,8 @@ const app = express()
 app.use(express.json())
 app.use(cookieparser())
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://blog-app-sjs3.onrender.com ',
+    // origin: 'http://localhost:5173',
     credentials: true, // ✅ Add this - Important for cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

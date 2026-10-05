@@ -15,7 +15,7 @@
 //   useEffect(() => {
 //     const getAllPublishedBlog = async () => {
 //       try {
-//         const res = await axios.get(`http://localhost:8000/api/v1/blog/get-publishhed-blogs`, { withCredentials: true })
+//         const res = await axios.get(`https://blog-app-sjs3.onrender.com//api/v1/blog/get-publishhed-blogs`, { withCredentials: true })
 //         console.log('allor', res.data.blogs);
 
 //         if (res.data.success) {
@@ -77,7 +77,7 @@ const Blogs = () => {
       setLoading(true);
 
       const res = await axios.get(
-        `http://localhost:8000/api/v1/blog/get-publishhed-blogs?page=${pageNumber}`,
+        `https://blog-app-sjs3.onrender.com//api/v1/blog/get-publishhed-blogs?page=${pageNumber}`,
         {
           withCredentials: true,
         }

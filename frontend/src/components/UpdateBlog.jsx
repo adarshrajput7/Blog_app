@@ -66,7 +66,7 @@ const UpdateBlog = () => {
 
         try {
             dispatch(setLoading(true))
-            const res = await axios.put(`http://localhost:8000/api/v1/blog/${id}`, formData, {
+            const res = await axios.put(`https://blog-app-sjs3.onrender.com//api/v1/blog/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }, withCredentials: true

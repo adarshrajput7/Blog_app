@@ -34,7 +34,7 @@ const CreateBlog = () => {
     e.preventDefault()
     try {
       dispatch(setLoading(true))
-      const res = await axios.post(`http://localhost:8000/api/v1/blog`, { title, category: categoryInput }, {
+      const res = await axios.post(`https://blog-app-sjs3.onrender.com//api/v1/blog`, { title, category: categoryInput }, {
         headers: {
           'Content-Type': 'application/json'
         }, withCredentials: true
